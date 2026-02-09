@@ -66,7 +66,11 @@
 │   ├── ARCHITECTURE.md         # Architecture decisions
 │   ├── brainstorm/             # Brainstorming sessions
 │   └── tasks/                  # Task breakdowns + registry
-└── .claude/                    # Claude Code configuration
+└── .claude/                     # Claude Code configuration
+    ├── agents/                 # Autonomous subagents
+    ├── commands/               # Slash commands
+    ├── skills/                 # Domain knowledge
+    └── output-styles/          # Response formatting
 ```
 
 ## Coding Standards
@@ -242,14 +246,23 @@ Three-layer synchronization:
 
 ## Testing
 
-See `docs/TESTING.md` for comprehensive testing procedures including:
+Run `/validate` for quick configuration checks:
 - Command validation tests
 - Agent triggering tests
 - Platform configuration tests
 - Cross-platform parity tests
-- Integration workflow tests
 
-Run `/validate` for quick configuration checks.
+## Available Skills
+
+| Skill | Purpose |
+|-------|---------|
+| `brainstorming` | Multi-mode structured ideation (14 modes) |
+| `cross-platform` | iOS/Android parity and design tokens |
+| `testing` | Platform-specific test patterns |
+| `components` | Reusable UI component development |
+| `command-development` | Slash command creation |
+| `agent-development` | Autonomous agent design |
+| `hook-development` | Event-driven automation |
 
 ## Memory Imports
 

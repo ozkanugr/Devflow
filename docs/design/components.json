@@ -1,0 +1,187 @@
+{
+  "$schema": "./schemas/components-schema.json",
+  "version": "1.0.0",
+  "description": "Design system component specifications - source of truth for iOS and Android",
+  "components": {
+    "Button": {
+      "variants": ["primary", "secondary", "tertiary", "destructive", "ghost"],
+      "sizes": ["small", "medium", "large"],
+      "states": ["default", "pressed", "disabled", "loading"],
+      "specs": {
+        "small": {
+          "height": 32,
+          "paddingHorizontal": 12,
+          "fontSize": "caption1",
+          "iconSize": 16
+        },
+        "medium": {
+          "height": 44,
+          "paddingHorizontal": 16,
+          "fontSize": "body",
+          "iconSize": 20
+        },
+        "large": {
+          "height": 56,
+          "paddingHorizontal": 24,
+          "fontSize": "headline",
+          "iconSize": 24
+        }
+      },
+      "platform": {
+        "ios": { "cornerRadius": 10 },
+        "android": { "cornerRadius": 20 }
+      }
+    },
+    "TextField": {
+      "variants": ["outlined", "filled", "underlined"],
+      "states": ["default", "focused", "error", "disabled"],
+      "specs": {
+        "height": 56,
+        "labelFontSize": "caption1",
+        "inputFontSize": "body",
+        "helperFontSize": "caption2",
+        "iconSize": 24,
+        "cornerRadius": 8
+      },
+      "platform": {
+        "ios": { "style": "rounded" },
+        "android": { "style": "material" }
+      }
+    },
+    "Card": {
+      "variants": ["elevated", "outlined", "filled"],
+      "specs": {
+        "padding": 16,
+        "cornerRadius": 12,
+        "elevated": { "shadow": "md" },
+        "outlined": { "borderWidth": 1 }
+      }
+    },
+    "List": {
+      "variants": ["plain", "inset", "grouped"],
+      "itemTypes": ["default", "navigation", "toggle", "destructive"],
+      "specs": {
+        "itemHeight": { "single": 44, "double": 60, "triple": 76 },
+        "iconSize": 24,
+        "accessorySize": 20,
+        "dividerInset": 16
+      }
+    },
+    "NavigationBar": {
+      "specs": {
+        "height": { "ios": 44, "android": 56 },
+        "titleFontSize": "headline",
+        "largeTitleFontSize": "largeTitle",
+        "iconSize": 24
+      }
+    },
+    "TabBar": {
+      "specs": {
+        "height": { "ios": 49, "android": 56 },
+        "iconSize": 24,
+        "labelFontSize": "caption2",
+        "maxItems": 5
+      }
+    },
+    "Modal": {
+      "variants": ["sheet", "fullscreen", "dialog", "alert"],
+      "specs": {
+        "sheet": {
+          "cornerRadius": 12,
+          "handleHeight": 4,
+          "handleWidth": 36
+        },
+        "dialog": {
+          "width": { "min": 280, "max": 560 },
+          "cornerRadius": 14,
+          "padding": 24
+        },
+        "alert": {
+          "width": 270,
+          "cornerRadius": 14,
+          "padding": 16
+        }
+      }
+    },
+    "Toast": {
+      "variants": ["info", "success", "warning", "error"],
+      "specs": {
+        "minHeight": 48,
+        "maxWidth": 480,
+        "cornerRadius": 8,
+        "padding": 12,
+        "iconSize": 20
+      }
+    },
+    "Avatar": {
+      "sizes": ["xs", "sm", "md", "lg", "xl"],
+      "specs": {
+        "xs": { "size": 24, "fontSize": "caption2" },
+        "sm": { "size": 32, "fontSize": "caption1" },
+        "md": { "size": 40, "fontSize": "body" },
+        "lg": { "size": 56, "fontSize": "title3" },
+        "xl": { "size": 80, "fontSize": "title1" }
+      }
+    },
+    "Badge": {
+      "variants": ["count", "dot", "status"],
+      "specs": {
+        "minSize": 18,
+        "fontSize": "caption2",
+        "padding": 4
+      }
+    },
+    "Chip": {
+      "variants": ["input", "filter", "suggestion"],
+      "states": ["default", "selected", "disabled"],
+      "specs": {
+        "height": 32,
+        "paddingHorizontal": 12,
+        "fontSize": "caption1",
+        "iconSize": 16,
+        "cornerRadius": 16
+      }
+    },
+    "Skeleton": {
+      "variants": ["text", "circular", "rectangular"],
+      "animation": "pulse",
+      "specs": {
+        "borderRadius": 4,
+        "opacity": 0.1
+      }
+    },
+    "Divider": {
+      "variants": ["full", "inset", "middle"],
+      "specs": {
+        "thickness": 1,
+        "insetStart": 16,
+        "insetEnd": 0
+      }
+    },
+    "ProgressIndicator": {
+      "variants": ["linear", "circular"],
+      "types": ["determinate", "indeterminate"],
+      "specs": {
+        "linear": { "height": 4, "cornerRadius": 2 },
+        "circular": { "size": { "sm": 20, "md": 36, "lg": 48 }, "strokeWidth": 4 }
+      }
+    }
+  },
+  "patterns": {
+    "formField": {
+      "labelPlacement": "top",
+      "labelSpacing": 8,
+      "errorSpacing": 4,
+      "helperSpacing": 4
+    },
+    "listItem": {
+      "leadingWidth": 40,
+      "trailingWidth": 24,
+      "contentSpacing": 12
+    },
+    "cardStack": {
+      "spacing": 12,
+      "overlap": 0
+    }
+  }
+}

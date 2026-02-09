@@ -1,0 +1,88 @@
+{
+  "$schema": "./schemas/spacing-schema.json",
+  "version": "1.0.0",
+  "description": "Design system spacing tokens - source of truth for iOS and Android",
+  "baseUnit": 4,
+  "spacing": {
+    "none": 0,
+    "xxs": 2,
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "xxl": 32,
+    "xxxl": 48,
+    "xxxxl": 64
+  },
+  "insets": {
+    "none": { "top": 0, "right": 0, "bottom": 0, "left": 0 },
+    "xs": { "top": 4, "right": 4, "bottom": 4, "left": 4 },
+    "sm": { "top": 8, "right": 8, "bottom": 8, "left": 8 },
+    "md": { "top": 12, "right": 12, "bottom": 12, "left": 12 },
+    "lg": { "top": 16, "right": 16, "bottom": 16, "left": 16 },
+    "xl": { "top": 24, "right": 24, "bottom": 24, "left": 24 },
+    "horizontal": { "top": 0, "right": 16, "bottom": 0, "left": 16 },
+    "vertical": { "top": 16, "right": 0, "bottom": 16, "left": 0 }
+  },
+  "layout": {
+    "screenMargin": {
+      "ios": 16,
+      "android": 16
+    },
+    "contentMaxWidth": 600,
+    "gridGutter": 16,
+    "sectionSpacing": 24,
+    "cardPadding": 16
+  },
+  "components": {
+    "button": {
+      "paddingHorizontal": 16,
+      "paddingVertical": 12,
+      "minHeight": 44,
+      "iconSpacing": 8
+    },
+    "input": {
+      "paddingHorizontal": 12,
+      "paddingVertical": 10,
+      "minHeight": 44,
+      "labelSpacing": 8
+    },
+    "list": {
+      "itemPadding": 16,
+      "itemSpacing": 0,
+      "sectionSpacing": 24,
+      "dividerInset": 16
+    },
+    "card": {
+      "padding": 16,
+      "spacing": 12,
+      "margin": 8
+    },
+    "modal": {
+      "padding": 24,
+      "cornerRadius": 12
+    },
+    "navigation": {
+      "tabBarHeight": { "ios": 49, "android": 56 },
+      "navigationBarHeight": { "ios": 44, "android": 56 }
+    }
+  },
+  "cornerRadius": {
+    "none": 0,
+    "xs": 2,
+    "sm": 4,
+    "md": 8,
+    "lg": 12,
+    "xl": 16,
+    "xxl": 24,
+    "full": 9999
+  },
+  "shadows": {
+    "none": { "x": 0, "y": 0, "blur": 0, "spread": 0, "opacity": 0 },
+    "sm": { "x": 0, "y": 1, "blur": 2, "spread": 0, "opacity": 0.05 },
+    "md": { "x": 0, "y": 2, "blur": 4, "spread": 0, "opacity": 0.1 },
+    "lg": { "x": 0, "y": 4, "blur": 8, "spread": 0, "opacity": 0.15 },
+    "xl": { "x": 0, "y": 8, "blur": 16, "spread": 0, "opacity": 0.2 }
+  }
+}

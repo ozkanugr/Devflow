@@ -1,0 +1,128 @@
+{
+  "$schema": "./schemas/typography-schema.json",
+  "version": "1.0.0",
+  "description": "Design system typography tokens - source of truth for iOS and Android",
+  "fontFamilies": {
+    "primary": {
+      "ios": "SF Pro",
+      "android": "Roboto"
+    },
+    "secondary": {
+      "ios": "SF Pro Rounded",
+      "android": "Roboto"
+    },
+    "monospace": {
+      "ios": "SF Mono",
+      "android": "Roboto Mono"
+    }
+  },
+  "fontWeights": {
+    "thin": 100,
+    "extraLight": 200,
+    "light": 300,
+    "regular": 400,
+    "medium": 500,
+    "semibold": 600,
+    "bold": 700,
+    "extraBold": 800,
+    "black": 900
+  },
+  "typeScale": {
+    "largeTitle": {
+      "fontSize": 34,
+      "lineHeight": 41,
+      "fontWeight": "regular",
+      "letterSpacing": 0.37,
+      "ios": { "textStyle": "largeTitle" },
+      "android": { "textStyle": "displayLarge" }
+    },
+    "title1": {
+      "fontSize": 28,
+      "lineHeight": 34,
+      "fontWeight": "regular",
+      "letterSpacing": 0.36,
+      "ios": { "textStyle": "title1" },
+      "android": { "textStyle": "headlineLarge" }
+    },
+    "title2": {
+      "fontSize": 22,
+      "lineHeight": 28,
+      "fontWeight": "regular",
+      "letterSpacing": 0.35,
+      "ios": { "textStyle": "title2" },
+      "android": { "textStyle": "headlineMedium" }
+    },
+    "title3": {
+      "fontSize": 20,
+      "lineHeight": 25,
+      "fontWeight": "regular",
+      "letterSpacing": 0.38,
+      "ios": { "textStyle": "title3" },
+      "android": { "textStyle": "headlineSmall" }
+    },
+    "headline": {
+      "fontSize": 17,
+      "lineHeight": 22,
+      "fontWeight": "semibold",
+      "letterSpacing": -0.41,
+      "ios": { "textStyle": "headline" },
+      "android": { "textStyle": "titleLarge" }
+    },
+    "body": {
+      "fontSize": 17,
+      "lineHeight": 22,
+      "fontWeight": "regular",
+      "letterSpacing": -0.41,
+      "ios": { "textStyle": "body" },
+      "android": { "textStyle": "bodyLarge" }
+    },
+    "callout": {
+      "fontSize": 16,
+      "lineHeight": 21,
+      "fontWeight": "regular",
+      "letterSpacing": -0.32,
+      "ios": { "textStyle": "callout" },
+      "android": { "textStyle": "bodyMedium" }
+    },
+    "subheadline": {
+      "fontSize": 15,
+      "lineHeight": 20,
+      "fontWeight": "regular",
+      "letterSpacing": -0.24,
+      "ios": { "textStyle": "subheadline" },
+      "android": { "textStyle": "bodyMedium" }
+    },
+    "footnote": {
+      "fontSize": 13,
+      "lineHeight": 18,
+      "fontWeight": "regular",
+      "letterSpacing": -0.08,
+      "ios": { "textStyle": "footnote" },
+      "android": { "textStyle": "bodySmall" }
+    },
+    "caption1": {
+      "fontSize": 12,
+      "lineHeight": 16,
+      "fontWeight": "regular",
+      "letterSpacing": 0,
+      "ios": { "textStyle": "caption1" },
+      "android": { "textStyle": "labelMedium" }
+    },
+    "caption2": {
+      "fontSize": 11,
+      "lineHeight": 13,
+      "fontWeight": "regular",
+      "letterSpacing": 0.07,
+      "ios": { "textStyle": "caption2" },
+      "android": { "textStyle": "labelSmall" }
+    }
+  },
+  "accessibility": {
+    "minimumFontSize": 12,
+    "supportsLargerText": true,
+    "dynamicTypeSupport": {
+      "ios": true,
+      "android": true
+    }
+  }
+}

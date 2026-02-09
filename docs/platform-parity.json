@@ -1,23 +1,160 @@
 {
+  "$schema": "./schemas/platform-parity-schema.json",
   "version": "1.0",
   "lastUpdated": null,
+  "metadata": {
+    "projectName": "${PROJECT_NAME}",
+    "platforms": ["ios", "android"],
+    "primaryPlatform": "ios",
+    "parityEnforcement": "strict"
+  },
+  "scoring": {
+    "weights": {
+      "features": 0.40,
+      "screens": 0.30,
+      "components": 0.20,
+      "designTokens": 0.10
+    },
+    "formula": "Score = (Features × 40%) + (Screens × 30%) + (Components × 20%) + (Tokens × 10%)",
+    "thresholds": {
+      "excellent": { "min": 95, "label": "Excellent Parity", "color": "green" },
+      "good": { "min": 80, "label": "Good Parity", "color": "blue" },
+      "needs_work": { "min": 60, "label": "Needs Work", "color": "yellow" },
+      "poor": { "min": 0, "label": "Poor Parity", "color": "red" }
+    }
+  },
   "summary": {
     "totalFeatures": 0,
     "fullyImplemented": 0,
     "iosOnly": 0,
     "androidOnly": 0,
     "inProgress": 0,
-    "parityScore": 100
+    "parityScore": 100,
+    "breakdown": {
+      "features": { "score": 100, "ios": 0, "android": 0, "both": 0 },
+      "screens": { "score": 100, "ios": 0, "android": 0, "both": 0 },
+      "components": { "score": 100, "ios": 0, "android": 0, "both": 0 },
+      "designTokens": { "score": 100, "synced": true }
+    }
   },
-  "features": {},
+  "statusDefinitions": {
+    "not_started": { "symbol": "⬜", "label": "Not Started", "color": "gray" },
+    "ios_only": { "symbol": "🍎", "label": "iOS Only", "color": "blue" },
+    "android_only": { "symbol": "🤖", "label": "Android Only", "color": "green" },
+    "in_progress": { "symbol": "🔄", "label": "In Progress", "color": "yellow" },
+    "parity": { "symbol": "✅", "label": "Full Parity", "color": "green" },
+    "exception": { "symbol": "⚠️", "label": "Exception", "color": "orange" }
+  },
+  "features": {
+    "_template": {
+      "name": "Feature Name",
+      "description": "Feature description",
+      "priority": "high",
+      "ios": {
+        "status": "not_started",
+        "implementedAt": null,
+        "version": null,
+        "notes": null
+      },
+      "android": {
+        "status": "not_started",
+        "implementedAt": null,
+        "version": null,
+        "notes": null
+      },
+      "parity": false,
+      "exception": null
+    }
+  },
+  "screens": {
+    "_template": {
+      "name": "Screen Name",
+      "feature": "parent-feature",
+      "ios": { "status": "not_started", "file": null },
+      "android": { "status": "not_started", "file": null },
+      "parity": false
+    }
+  },
+  "components": {
+    "_template": {
+      "name": "Component Name",
+      "type": "ui",
+      "ios": { "status": "not_started", "file": null },
+      "android": { "status": "not_started", "file": null },
+      "designTokensUsed": true,
+      "parity": false
+    }
+  },
   "designTokens": {
-    "colors": { "synced": true, "lastSync": null },
-    "typography": { "synced": true, "lastSync": null },
-    "spacing": { "synced": true, "lastSync": null },
-    "components": { "synced": true, "lastSync": null }
+    "colors": {
+      "synced": false,
+      "lastSync": null,
+      "source": "docs/design/colors.json",
+      "targets": {
+        "ios": "ios/Sources/Core/Design/Colors.swift",
+        "android": "android/app/src/main/java/core/design/Colors.kt"
+      }
+    },
+    "typography": {
+      "synced": false,
+      "lastSync": null,
+      "source": "docs/design/typography.json",
+      "targets": {
+        "ios": "ios/Sources/Core/Design/Typography.swift",
+        "android": "android/app/src/main/java/core/design/Typography.kt"
+      }
+    },
+    "spacing": {
+      "synced": false,
+      "lastSync": null,
+      "source": "docs/design/spacing.json",
+      "targets": {
+        "ios": "ios/Sources/Core/Design/Spacing.swift",
+        "android": "android/app/src/main/java/core/design/Spacing.kt"
+      }
+    },
+    "components": {
+      "synced": false,
+      "lastSync": null,
+      "source": "docs/design/components.json",
+      "targets": {
+        "ios": "ios/Sources/Core/Design/Components.swift",
+        "android": "android/app/src/main/java/core/design/Components.kt"
+      }
+    }
   },
-  "screens": {},
-  "components": {},
-  "apiIntegrations": {},
-  "exceptions": []
+  "apiIntegrations": {
+    "_template": {
+      "endpoint": "/api/endpoint",
+      "ios": { "implemented": false, "file": null },
+      "android": { "implemented": false, "file": null },
+      "contract": "docs/api/contracts.json#/endpoints/endpoint",
+      "parity": false
+    }
+  },
+  "exceptions": [
+    {
+      "_template": true,
+      "feature": "feature-name",
+      "platform": "ios",
+      "reason": "Platform-specific capability (e.g., WidgetKit, Live Activities)",
+      "approved": true,
+      "approvedBy": null,
+      "approvedAt": null,
+      "alternativeOnOther": null
+    }
+  ],
+  "validationRules": {
+    "enforceDesignTokens": true,
+    "requireParityBeforeMerge": true,
+    "allowExceptionsWithApproval": true,
+    "maxDaysOutOfParity": 14,
+    "autoSyncTokens": true
+  },
+  "reports": {
+    "lastGeneratedAt": null,
+    "schedule": "on-commit",
+    "recipients": [],
+    "includeInPR": true
+  }
 }

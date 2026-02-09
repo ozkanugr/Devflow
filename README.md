@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Compatible-blue.svg)](https://claude.ai/code)
-[![Version](https://img.shields.io/badge/Version-4.1.0-green.svg)](#changelog)
+[![Version](https://img.shields.io/badge/Version-4.2.0-green.svg)](#changelog)
 
 ---
 
@@ -31,7 +31,10 @@
 5. [Agents Reference](#agents-reference)
    - [Agent Overview](#agent-overview)
    - [Agent Specifications](#agent-specifications)
-6. [Integration Matrix](#integration-matrix)
+6. [Skills Reference](#skills-reference)
+   - [Available Skills](#available-skills)
+   - [Skill Structure](#skill-structure)
+7. [Integration Matrix](#integration-matrix)
    - [Command-Agent Matrix](#command-agent-matrix)
    - [Agent Collaboration Matrix](#agent-collaboration-matrix)
    - [Resource Dependencies](#resource-dependencies)
@@ -196,28 +199,28 @@ The framework consists of four interconnected component types:
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  COMMANDS (.claude/commands/*.md)                               │
+│  COMMANDS (.claude/commands/*.md)                                │
 │  User-invocable slash commands that orchestrate workflows       │
 │  Example: /brainstorm, /build, /platform-init                   │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  AGENTS (.claude/agents/*.md)                                   │
+│  AGENTS (.claude/agents/*.md)                                    │
 │  Specialized AI experts that handle complex domain tasks        │
 │  Example: ios-specialist, architect, task-manager               │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  SKILLS (.claude/skills/*/SKILL.md)                             │
+│  SKILLS (.claude/skills/*/SKILL.md)                              │
 │  Auto-activated capabilities triggered by context               │
 │  Example: cross-platform skill, brainstorming modes             │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│  HOOKS (.claude/hooks/*.sh)                                     │
+│  HOOKS (.claude/hooks/*.sh)                                      │
 │  Shell scripts triggered by events                              │
 │  Example: pre-commit validation, post-edit sync                 │
 └─────────────────────────────────────────────────────────────────┘
@@ -693,6 +696,53 @@ Validate framework configuration integrity.
 - Security review
 - Performance suggestions
 - Best practice enforcement
+
+---
+
+## Skills Reference
+
+Skills are auto-activated capabilities that provide specialized knowledge and guidance when Claude detects relevant context.
+
+### Available Skills
+
+| Skill | Purpose | Triggers On |
+|-------|---------|-------------|
+| `brainstorming` | 14-mode structured ideation | "brainstorm", "plan project", "lean canvas", "5w1h" |
+| `cross-platform` | iOS/Android parity enforcement | "implement for both", "sync tokens", "platform parity" |
+| `testing` | TDD and test strategies | "write tests", "TDD", "mock dependencies", "test coverage" |
+| `components` | UI component architecture | "create component", "design system", "build UI element" |
+| `command-development` | Creating slash commands | "create command", "command frontmatter", "dynamic arguments" |
+| `agent-development` | Creating autonomous agents | "create agent", "agent triggering", "system prompt design" |
+| `hook-development` | Event-driven automation | "create hook", "PreToolUse", "validate tool use" |
+
+### Skill Structure
+
+Each skill follows a standardized structure:
+
+```
+.claude/skills/
+└── skill-name/
+    ├── SKILL.md           # Main skill file (required)
+    ├── references/        # Detailed documentation
+    ├── examples/          # Working examples
+    └── scripts/           # Utility scripts
+```
+
+### Skill Frontmatter
+
+```yaml
+---
+name: skill-name
+description: This skill should be used when the user asks to "trigger phrase 1", "trigger phrase 2"...
+version: 1.0.0
+---
+```
+
+**Key requirements:**
+- `description` must use third-person format
+- Include specific trigger phrases users would say
+- Body should use imperative/infinitive form
+- Keep SKILL.md under 500 lines
 
 ---
 
@@ -1297,8 +1347,13 @@ project-root/
 │   │   ├── platform-init.md
 │   │   └── ...
 │   ├── skills/                     # Auto-activated skills
-│   │   ├── brainstorming/
-│   │   └── cross-platform/
+│   │   ├── brainstorming/          # Multi-mode brainstorming
+│   │   ├── cross-platform/         # iOS/Android parity
+│   │   ├── testing/                # TDD & test strategies
+│   │   ├── components/             # UI component building
+│   │   ├── command-development/    # Creating commands
+│   │   ├── agent-development/      # Creating agents
+│   │   └── hook-development/       # Event-driven automation
 │   └── hooks/                      # Event hooks
 │       ├── session-start.sh
 │       └── post-edit.sh
@@ -1437,7 +1492,20 @@ A: Ensure `docs/platform.json` exists and has platforms enabled. Run `/validate 
 
 ## Changelog
 
-### v4.1.0 — Cross-Platform Edition (Current)
+### v4.2.0 — Skills Enhancement Edition (Current)
+
+- **Added:** command-development skill for creating slash commands
+- **Added:** agent-development skill for creating autonomous agents
+- **Added:** hook-development skill for event-driven automation
+- **Enhanced:** All skills now follow standardized frontmatter format
+- **Enhanced:** brainstorming skill restructured (under 500 lines)
+- **Enhanced:** cross-platform skill with proper frontmatter
+- **Enhanced:** testing skill with platform-specific patterns
+- **Enhanced:** components skill with iOS/Android examples
+- **Enhanced:** _base-skill template with comprehensive guidelines
+- **Updated:** README with Skills Reference section
+
+### v4.1.0 — Cross-Platform Edition
 
 - **Added:** Cross-platform iOS/Android support
 - **Added:** Platform specialist agents

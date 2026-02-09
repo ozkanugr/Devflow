@@ -1,8 +1,14 @@
+---
+name: cross-platform
+description: This skill should be used when the user asks to "implement for both platforms", "ensure iOS and Android parity", "sync design tokens", "check platform parity", "create cross-platform feature", "use shared design tokens", "implement feature on iOS", "implement feature on Android", or needs guidance on maintaining identical design and functionality across iOS and Android platforms through design token synchronization, parity enforcement, and unified specifications.
+version: 1.0.0
+---
+
 # Cross-Platform Development Skill
 
-Ensures identical design and functionality across iOS and Android platforms through systematic parity enforcement, shared design tokens, and unified specifications.
+Ensure identical design and functionality across iOS and Android platforms through systematic parity enforcement, shared design tokens, and unified specifications.
 
-## Activation Triggers
+## Activation Context
 
 This skill activates when:
 - Platform configuration exists (`docs/platform.json`)
@@ -169,8 +175,7 @@ Where:
 # 1. Check current parity
 /platform-parity
 
-# 2. Identify gaps
-# (Command shows missing screens/components)
+# 2. Identify gaps (command shows missing screens/components)
 
 # 3. Implement missing pieces
 /implement-android {feature}#{missing-screen}
@@ -183,47 +188,37 @@ Where:
 
 ### Issue: Hardcoded Values
 
+**iOS - Incorrect:**
 ```swift
-// ❌ iOS - Hardcoded
 Text("Title").foregroundStyle(Color(#007AFF))
+```
 
-// ✅ iOS - Token
+**iOS - Correct:**
+```swift
 Text("Title").foregroundStyle(.brandPrimary)
 ```
 
+**Android - Incorrect:**
 ```kotlin
-// ❌ Android - Hardcoded
 Text("Title", color = Color(0xFF007AFF))
-
-// ✅ Android - Token
-Text("Title", color = AppColors.BrandPrimary)
 ```
 
-### Issue: Platform-Specific Behavior
-
-```swift
-// ❌ iOS-only feature without Android equivalent
-if UIDevice.current.userInterfaceIdiom == .phone {
-    // Phone-specific behavior
-}
-
-// ✅ Abstract behind shared interface
-if DeviceType.current == .phone {
-    // Works on both platforms
-}
+**Android - Correct:**
+```kotlin
+Text("Title", color = AppColors.BrandPrimary)
 ```
 
 ### Issue: Different State Handling
 
+**iOS State:**
 ```swift
-// iOS State
 @State private var isLoading = false
 @State private var items: [Item] = []
 @State private var error: Error?
 ```
 
+**Android State - Must match iOS:**
 ```kotlin
-// Android State - Must match iOS
 data class UiState(
     val isLoading: Boolean = false,
     val items: List<Item> = emptyList(),
@@ -233,7 +228,7 @@ data class UiState(
 
 ## Exceptions Registry
 
-Some features may intentionally differ. Document exceptions:
+Document intentional differences:
 
 ```json
 {
@@ -249,26 +244,6 @@ Some features may intentionally differ. Document exceptions:
 }
 ```
 
-## Testing for Parity
-
-### Visual Regression Testing
-
-- Screenshot comparison between platforms
-- Layout verification at different screen sizes
-- Dark mode consistency
-
-### Behavioral Testing
-
-- Same test scenarios on both platforms
-- Same expected outcomes
-- Same error handling paths
-
-### API Testing
-
-- Same request payloads
-- Same response handling
-- Same error mapping
-
 ## Quick Reference Commands
 
 | Command | Purpose |
@@ -283,15 +258,11 @@ Some features may intentionally differ. Document exceptions:
 
 When generating tasks for cross-platform features:
 
-```markdown
-## Implementation Tasks
-
 | ID | Task | Platform | Depends On |
 |----|------|----------|------------|
 | auth-1 | Create shared models | Both | - |
 | auth-2 | Implement iOS login | iOS | auth-1 |
 | auth-3 | Implement Android login | Android | auth-1 |
 | auth-4 | Verify parity | Both | auth-2, auth-3 |
-```
 
 Tasks are automatically created for both platforms with dependencies.

@@ -23,7 +23,7 @@ Run comprehensive validation checks on the Claude Code configuration framework t
 
 ### 1. Command Validation
 
-For each file in `claude/commands/*.md`:
+For each file in `.claude/commands/*.md`:
 
 | Check | Rule | Severity |
 |-------|------|----------|
@@ -46,7 +46,7 @@ For each file in `claude/commands/*.md`:
 
 ### 2. Agent Validation
 
-For each file in `claude/agents/*.md`:
+For each file in `.claude/agents/*.md`:
 
 | Check | Rule | Severity |
 |-------|------|----------|
