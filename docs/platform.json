@@ -1,0 +1,88 @@
+{
+  "$schema": "./platform-schema.json",
+  "version": "1.0",
+  "_comment": "TEMPLATE: Run /platform-init to populate this file with project-specific values",
+  "project": {
+    "name": "${PROJECT_NAME}",
+    "type": "mobile",
+    "description": "${PROJECT_DESCRIPTION}"
+  },
+  "platforms": {
+    "enabled": ["ios", "android"],
+    "primary": "ios",
+    "ios": {
+      "enabled": true,
+      "minVersion": "16.0",
+      "language": "swift",
+      "uiFramework": "swiftui",
+      "architecture": "mvvm",
+      "packageManager": "spm",
+      "bundleId": "${BUNDLE_ID:com.example.appname}",
+      "targets": ["iPhone", "iPad"],
+      "capabilities": []
+    },
+    "android": {
+      "enabled": true,
+      "minSdk": 26,
+      "targetSdk": 34,
+      "language": "kotlin",
+      "uiFramework": "compose",
+      "architecture": "mvvm",
+      "packageManager": "gradle",
+      "applicationId": "${APPLICATION_ID:com.example.appname}",
+      "targets": ["phone", "tablet"],
+      "capabilities": []
+    }
+  },
+  "shared": {
+    "designSystem": {
+      "name": "${DESIGN_SYSTEM_NAME}",
+      "colorTokens": "docs/design/colors.json",
+      "typography": "docs/design/typography.json",
+      "spacing": "docs/design/spacing.json",
+      "components": "docs/design/components.json"
+    },
+    "features": [],
+    "apiContracts": "docs/api/contracts.json",
+    "localization": {
+      "defaultLanguage": "en",
+      "supportedLanguages": ["en"]
+    }
+  },
+  "parity": {
+    "enforced": true,
+    "checkOnBuild": true,
+    "registry": "docs/platform-parity.json",
+    "exceptions": []
+  },
+  "paths": {
+    "ios": {
+      "root": "ios/",
+      "sources": "ios/Sources/",
+      "resources": "ios/Resources/",
+      "tests": "ios/Tests/"
+    },
+    "android": {
+      "root": "android/",
+      "sources": "android/app/src/main/",
+      "resources": "android/app/src/main/res/",
+      "tests": "android/app/src/test/"
+    },
+    "shared": {
+      "design": "docs/design/",
+      "api": "docs/api/",
+      "specs": "docs/specs/"
+    }
+  },
+  "build": {
+    "ios": {
+      "scheme": "${APP_SCHEME}",
+      "configuration": "Debug",
+      "simulator": "iPhone 15 Pro"
+    },
+    "android": {
+      "variant": "debug",
+      "emulator": "Pixel_7_API_34"
+    }
+  }
+}

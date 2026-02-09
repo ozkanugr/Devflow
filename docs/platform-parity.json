@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "lastUpdated": null,
+  "summary": {
+    "totalFeatures": 0,
+    "fullyImplemented": 0,
+    "iosOnly": 0,
+    "androidOnly": 0,
+    "inProgress": 0,
+    "parityScore": 100
+  },
+  "features": {},
+  "designTokens": {
+    "colors": { "synced": true, "lastSync": null },
+    "typography": { "synced": true, "lastSync": null },
+    "spacing": { "synced": true, "lastSync": null },
+    "components": { "synced": true, "lastSync": null }
+  },
+  "screens": {},
+  "components": {},
+  "apiIntegrations": {},
+  "exceptions": []
+}
