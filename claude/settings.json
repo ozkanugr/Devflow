@@ -301,12 +301,6 @@
 
   "enabledPlugins": {},
 
-  "statusLine": {
-    "type": "command",
-    "command": "bash .claude/hooks/statusline.sh 2>/dev/null || echo '⎇ '$(git branch --show-current 2>/dev/null || echo 'detached')",
-    "padding": 2
-  },
-
   "autoUpdatesChannel": "stable",
   "cleanupPeriodDays": 30,
   "respectGitignore": true,
