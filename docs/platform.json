@@ -1,5 +1,5 @@
 {
-  "$schema": "./platform-schema.json",
+  "$schema": "design/schemas/platform-schema.json",
   "version": "1.0",
   "_comment": "TEMPLATE: Run /platform-init to populate this file with project-specific values",
   "project": {

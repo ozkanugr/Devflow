@@ -10,13 +10,6 @@
     "defaultMode": "default",
 
     "allow": [
-      "Bash(npm run lint*)",
-      "Bash(npm run test*)",
-      "Bash(npm run build*)",
-      "Bash(npx tsc --noEmit*)",
-      "Bash(npx prettier --write*)",
-      "Bash(npx eslint --fix*)",
-
       "Bash(git status*)",
       "Bash(git diff*)",
       "Bash(git log*)",
@@ -24,6 +17,26 @@
       "Bash(git stash*)",
       "Bash(git add:*)",
 
+      "Bash(xcodebuild -list*)",
+      "Bash(xcodebuild -showBuildSettings*)",
+      "Bash(swift build*)",
+      "Bash(swift test*)",
+      "Bash(swift package*)",
+      "Bash(pod install*)",
+      "Bash(pod update*)",
+
+      "Bash(./gradlew*)",
+      "Bash(gradle*)",
+      "Bash(./gradlew assembleDebug*)",
+      "Bash(./gradlew test*)",
+      "Bash(./gradlew lint*)",
+
+      "Bash(npm run lint*)",
+      "Bash(npm run test*)",
+      "Bash(npm run build*)",
+      "Bash(npx tsc --noEmit*)",
+      "Bash(npx prettier --write*)",
+      "Bash(npx eslint --fix*)",
       "Bash(npm ls*)",
       "Bash(npm outdated*)",
       "Bash(npm info*)",
@@ -36,6 +49,12 @@
       "Read(./README*)",
       "Read(./docs/**)",
 
+      "Read(./ios/**)",
+      "Read(./android/**)",
+      "Edit(./ios/Sources/**)",
+      "Edit(./ios/Tests/**)",
+      "Edit(./android/app/src/**)",
+
       "Edit(./src/**)",
       "Edit(./lib/**)",
       "Edit(./tests/**)",
@@ -44,11 +63,16 @@
       "Read(./.claude/skills/**)",
       "Read(./.claude/agents/**)",
       "Read(./.claude/commands/**)",
+      "Read(./.claude/hooks/**)",
       "Write(./docs/brainstorm/**)",
       "Write(./docs/specs/**)",
       "Write(./docs/tasks/**)",
+      "Write(./docs/api/**)",
+      "Write(./docs/design/**)",
       "Write(./docs/PRD.md)",
       "Write(./docs/ARCHITECTURE.md)",
+      "Write(./docs/platform.json)",
+      "Write(./docs/platform-parity.json)",
 
       "Glob",
       "Grep"
@@ -141,7 +165,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/session-start.sh",
+            "command": "if [ -f .claude/hooks/session-start.sh ]; then bash .claude/hooks/session-start.sh; fi",
             "timeout": 10
           }
         ]
@@ -154,7 +178,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/file-protection.sh",
+            "command": "if [ -f .claude/hooks/file-protection.sh ]; then bash .claude/hooks/file-protection.sh; fi",
             "timeout": 5
           }
         ]
@@ -164,7 +188,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"[PRE-BASH] $(date '+%Y-%m-%d %H:%M:%S')\" >> .claude/audit.log",
+            "command": "mkdir -p .claude/logs && echo \"[PRE-BASH] $(date '+%Y-%m-%d %H:%M:%S')\" >> .claude/logs/audit.log",
             "timeout": 3
           }
         ]
@@ -177,7 +201,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/post-edit.sh",
+            "command": "if [ -f .claude/hooks/post-edit.sh ]; then bash .claude/hooks/post-edit.sh; fi",
             "timeout": 10
           }
         ]
@@ -187,7 +211,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"[POST-BASH] $(date '+%Y-%m-%d %H:%M:%S') exit=$TOOL_EXIT_CODE\" >> .claude/audit.log",
+            "command": "mkdir -p .claude/logs && echo \"[POST-BASH] $(date '+%Y-%m-%d %H:%M:%S') exit=$TOOL_EXIT_CODE\" >> .claude/logs/audit.log",
             "timeout": 3
           }
         ]
@@ -199,7 +223,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"[FAILURE] $(date '+%Y-%m-%d %H:%M:%S') $TOOL_NAME\" >> .claude/errors.log",
+            "command": "mkdir -p .claude/logs && echo \"[FAILURE] $(date '+%Y-%m-%d %H:%M:%S') $TOOL_NAME\" >> .claude/logs/errors.log",
             "timeout": 3
           }
         ]
@@ -211,7 +235,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"[STOP] $(date '+%Y-%m-%d %H:%M:%S')\" >> .claude/audit.log",
+            "command": "mkdir -p .claude/logs && echo \"[STOP] $(date '+%Y-%m-%d %H:%M:%S')\" >> .claude/logs/audit.log",
             "timeout": 3
           }
         ]
@@ -223,7 +247,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"[PROMPT] $(date '+%Y-%m-%d %H:%M:%S')\" >> .claude/audit.log",
+            "command": "mkdir -p .claude/logs && echo \"[PROMPT] $(date '+%Y-%m-%d %H:%M:%S')\" >> .claude/logs/audit.log",
             "timeout": 3
           }
         ]
@@ -235,7 +259,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"[SUBAGENT-START] $(date '+%Y-%m-%d %H:%M:%S')\" >> .claude/audit.log",
+            "command": "mkdir -p .claude/logs && echo \"[SUBAGENT-START] $(date '+%Y-%m-%d %H:%M:%S')\" >> .claude/logs/audit.log",
             "timeout": 3
           }
         ]
@@ -247,7 +271,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"[SUBAGENT-STOP] $(date '+%Y-%m-%d %H:%M:%S')\" >> .claude/audit.log",
+            "command": "mkdir -p .claude/logs && echo \"[SUBAGENT-STOP] $(date '+%Y-%m-%d %H:%M:%S')\" >> .claude/logs/audit.log",
             "timeout": 3
           }
         ]
@@ -259,7 +283,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"[COMPACT] $(date '+%Y-%m-%d %H:%M:%S')\" >> .claude/audit.log",
+            "command": "mkdir -p .claude/logs && echo \"[COMPACT] $(date '+%Y-%m-%d %H:%M:%S')\" >> .claude/logs/audit.log",
             "timeout": 3
           }
         ]
@@ -271,7 +295,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "chmod +x .claude/hooks/*.sh 2>/dev/null; echo '✅ Hooks ready' >&2",
+            "command": "mkdir -p .claude/logs && chmod +x .claude/hooks/*.sh 2>/dev/null; echo 'Hooks ready' >&2",
             "timeout": 30
           }
         ]

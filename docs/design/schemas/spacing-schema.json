@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "spacing-schema.json",
+  "title": "Design System Spacing Schema",
+  "description": "JSON Schema for validating spacing token definitions",
+  "type": "object",
+  "required": ["version", "spacing"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": { "type": "string" },
+    "baseUnit": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 4
+    },
+    "spacing": {
+      "type": "object",
+      "patternProperties": {
+        "^(none|xxs|xs|sm|md|lg|xl|xxl|xxxl|xxxxl)$": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "insets": {
+      "type": "object",
+      "patternProperties": {
+        ".*": { "$ref": "#/$defs/edgeInsets" }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "properties": {
+        "screenMargin": { "$ref": "#/$defs/platformValue" },
+        "contentMaxWidth": { "type": "integer" },
+        "gridGutter": { "type": "integer" },
+        "sectionSpacing": { "type": "integer" },
+        "cardPadding": { "type": "integer" }
+      }
+    },
+    "components": {
+      "type": "object",
+      "patternProperties": {
+        ".*": { "type": "object" }
+      }
+    },
+    "cornerRadius": {
+      "type": "object",
+      "patternProperties": {
+        "^(none|xs|sm|md|lg|xl|xxl|full)$": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "shadows": {
+      "type": "object",
+      "patternProperties": {
+        ".*": { "$ref": "#/$defs/shadowSpec" }
+      }
+    }
+  },
+  "$defs": {
+    "edgeInsets": {
+      "type": "object",
+      "properties": {
+        "top": { "type": "integer" },
+        "right": { "type": "integer" },
+        "bottom": { "type": "integer" },
+        "left": { "type": "integer" }
+      },
+      "required": ["top", "right", "bottom", "left"]
+    },
+    "platformValue": {
+      "oneOf": [
+        { "type": "integer" },
+        {
+          "type": "object",
+          "properties": {
+            "ios": { "type": "integer" },
+            "android": { "type": "integer" }
+          }
+        }
+      ]
+    },
+    "shadowSpec": {
+      "type": "object",
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "blur": { "type": "number", "minimum": 0 },
+        "spread": { "type": "number" },
+        "opacity": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

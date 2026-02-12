@@ -6,6 +6,21 @@
 
 Hooks are bash scripts that execute in response to Claude Code events. They enable validation, context loading, logging, and automation without modifying the core workflow.
 
+## Directory Structure
+
+```
+.claude/
+├── hooks/
+│   ├── README.md              # This file
+│   ├── session-start.sh       # Session initialization
+│   ├── file-protection.sh     # Pre-edit file validation
+│   └── post-edit.sh           # Post-edit processing
+├── logs/                      # Auto-created log directory
+│   ├── audit.log              # Session activity log
+│   └── errors.log             # Error tracking
+└── settings.json              # Hook configuration
+```
+
 ## Available Hooks
 
 | Hook | Event | Purpose |
@@ -27,21 +42,21 @@ Hooks are bash scripts that execute in response to Claude Code events. They enab
 | `Stop` | Agent stops | Completion validation |
 | `SubagentStop` | Subagent stops | Task validation |
 | `PreCompact` | Before compaction | Preserve important context |
+| `Setup` | Initial setup | Make hooks executable, create directories |
 
 ## Configuration
 
-Hooks are configured in `claude/settings.json`:
+Hooks are configured in `.claude/settings.json`:
 
 ```json
 {
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "bash claude/hooks/session-start.sh",
+            "command": "if [ -f .claude/hooks/session-start.sh ]; then bash .claude/hooks/session-start.sh; fi",
             "timeout": 10
           }
         ]
@@ -53,7 +68,7 @@ Hooks are configured in `claude/settings.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "bash claude/hooks/file-protection.sh",
+            "command": "if [ -f .claude/hooks/file-protection.sh ]; then bash .claude/hooks/file-protection.sh; fi",
             "timeout": 5
           }
         ]
@@ -95,25 +110,29 @@ All hooks receive JSON via stdin:
 |----------|-------------|
 | `CLAUDE_PROJECT_DIR` | Project root path |
 | `CLAUDE_ENV_FILE` | SessionStart only: persist env vars |
+| `TOOL_NAME` | Name of the tool being executed |
+| `TOOL_EXIT_CODE` | Exit code from tool (PostToolUse only) |
 
-## Logging Pattern
+## Logging
 
-Standard log format for hooks:
+Logs are written to `.claude/logs/`:
 
-```bash
-# Info logging (visible in transcript)
-echo "[INFO] Message here" >&2
+- `audit.log` — All session activity
+- `errors.log` — Failed operations
 
-# Structured logging (to file)
-log_event() {
-    local level="$1"
-    local message="$2"
-    echo "[$level] $(date '+%Y-%m-%d %H:%M:%S') $message" >> .claude/audit.log
-}
+### Log Format
 
-log_event "INFO" "Hook executed successfully"
-log_event "WARN" "Potential issue detected"
-log_event "ERROR" "Operation blocked"
+```
+[EVENT_TYPE] YYYY-MM-DD HH:MM:SS [additional info]
+```
+
+### Example Log Entries
+
+```
+[PROMPT] 2026-02-12 10:30:00
+[PRE-BASH] 2026-02-12 10:30:01
+[POST-BASH] 2026-02-12 10:30:02 exit=0
+[STOP] 2026-02-12 10:35:00
 ```
 
 ## Creating New Hooks
@@ -125,14 +144,13 @@ log_event "ERROR" "Operation blocked"
 # Hook: [EventName]
 # Matcher: [pattern] (for PreToolUse/PostToolUse)
 # Purpose: [Brief description]
-# Usage: Add to settings.json under hooks.[EventName]
 
 set -euo pipefail
 
 # Read input from stdin
 INPUT=$(cat)
 
-# Extract relevant fields
+# Extract relevant fields using jq
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
 
@@ -151,6 +169,7 @@ exit 0
 4. **Use stderr for messages**: `echo "message" >&2`
 5. **Set appropriate timeouts**: Default is 60s for commands
 6. **Keep hooks fast**: Avoid slow operations
+7. **Use conditional execution**: Check if hook file exists before running
 
 ### Security Checklist
 
@@ -165,17 +184,21 @@ exit 0
 ### Manual Testing
 
 ```bash
-# Test with sample input
-echo '{"tool_name":"Write","tool_input":{"file_path":"/test/file.txt"}}' | \
-  bash claude/hooks/file-protection.sh
+# Test file protection hook
+echo '{"tool_name":"Write","tool_input":{"file_path":"test.txt"}}' | \
+  bash .claude/hooks/file-protection.sh
+echo "Exit code: $?"
+
+# Test with protected file
+echo '{"tool_name":"Write","tool_input":{"file_path":".env"}}' | \
+  bash .claude/hooks/file-protection.sh
 echo "Exit code: $?"
 ```
 
-### Validation Script
+### Make Hooks Executable
 
 ```bash
-# Run the hook linter
-bash improvements/hook-development/scripts/hook-linter.sh claude/hooks/
+chmod +x .claude/hooks/*.sh
 ```
 
 ## Troubleshooting
@@ -183,13 +206,13 @@ bash improvements/hook-development/scripts/hook-linter.sh claude/hooks/
 | Issue | Cause | Solution |
 |-------|-------|----------|
 | Hook not running | Not in settings.json | Add hook configuration |
-| Permission denied | Wrong file mode | `chmod +x hook.sh` |
+| Permission denied | Wrong file mode | `chmod +x .claude/hooks/*.sh` |
 | JSON parse error | Invalid input | Check jq syntax |
 | Timeout | Slow operation | Increase timeout or optimize |
 | Wrong matcher | Pattern mismatch | Check regex pattern |
+| Hook file not found | Path incorrect | Use `.claude/hooks/` path |
 
 ## Related Resources
 
-- `improvements/hook-development/` - Advanced hook patterns
-- `claude/settings.json` - Hook configuration
-- `claude/skills/hook-development/SKILL.md` - Hook development skill
+- `.claude/settings.json` — Hook configuration
+- `.claude/skills/hook-development/SKILL.md` — Hook development skill

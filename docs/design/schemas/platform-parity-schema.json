@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "platform-parity-schema.json",
+  "title": "Platform Parity Schema",
+  "description": "JSON Schema for tracking cross-platform feature parity",
+  "type": "object",
+  "required": ["version", "metadata", "features"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "string" },
+    "lastUpdated": { "type": ["string", "null"], "format": "date-time" },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "projectName": { "type": "string" },
+        "platforms": {
+          "type": "array",
+          "items": { "enum": ["ios", "android"] }
+        },
+        "primaryPlatform": { "enum": ["ios", "android"] },
+        "parityEnforcement": { "enum": ["strict", "relaxed", "none"] }
+      }
+    },
+    "scoring": { "$ref": "#/$defs/scoringConfig" },
+    "summary": { "$ref": "#/$defs/summaryStats" },
+    "statusDefinitions": { "type": "object" },
+    "features": {
+      "type": "object",
+      "patternProperties": {
+        ".*": { "$ref": "#/$defs/featureEntry" }
+      }
+    },
+    "screens": {
+      "type": "object",
+      "patternProperties": {
+        ".*": { "$ref": "#/$defs/screenEntry" }
+      }
+    },
+    "components": {
+      "type": "object",
+      "patternProperties": {
+        ".*": { "$ref": "#/$defs/componentEntry" }
+      }
+    },
+    "designTokens": { "$ref": "#/$defs/designTokensStatus" },
+    "apiIntegrations": {
+      "type": "object",
+      "patternProperties": {
+        ".*": { "$ref": "#/$defs/apiEntry" }
+      }
+    },
+    "exceptions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/exceptionEntry" }
+    },
+    "validationRules": { "$ref": "#/$defs/validationConfig" },
+    "reports": { "$ref": "#/$defs/reportsConfig" }
+  },
+  "$defs": {
+    "scoringConfig": {
+      "type": "object",
+      "properties": {
+        "weights": {
+          "type": "object",
+          "properties": {
+            "features": { "type": "number", "minimum": 0, "maximum": 1 },
+            "screens": { "type": "number", "minimum": 0, "maximum": 1 },
+            "components": { "type": "number", "minimum": 0, "maximum": 1 },
+            "designTokens": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "formula": { "type": "string" },
+        "thresholds": { "type": "object" }
+      }
+    },
+    "summaryStats": {
+      "type": "object",
+      "properties": {
+        "totalFeatures": { "type": "integer" },
+        "fullyImplemented": { "type": "integer" },
+        "iosOnly": { "type": "integer" },
+        "androidOnly": { "type": "integer" },
+        "inProgress": { "type": "integer" },
+        "parityScore": { "type": "number", "minimum": 0, "maximum": 100 },
+        "breakdown": { "type": "object" }
+      }
+    },
+    "platformStatus": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": ["not_started", "in_progress", "completed", "exception"]
+        },
+        "implementedAt": { "type": ["string", "null"], "format": "date-time" },
+        "version": { "type": ["string", "null"] },
+        "file": { "type": ["string", "null"] },
+        "notes": { "type": ["string", "null"] }
+      }
+    },
+    "featureEntry": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "priority": { "enum": ["high", "medium", "low"] },
+        "ios": { "$ref": "#/$defs/platformStatus" },
+        "android": { "$ref": "#/$defs/platformStatus" },
+        "parity": { "type": "boolean" },
+        "exception": { "type": ["string", "null"] }
+      }
+    },
+    "screenEntry": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "feature": { "type": "string" },
+        "ios": { "$ref": "#/$defs/platformStatus" },
+        "android": { "$ref": "#/$defs/platformStatus" },
+        "parity": { "type": "boolean" }
+      }
+    },
+    "componentEntry": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "enum": ["ui", "utility", "data"] },
+        "ios": { "$ref": "#/$defs/platformStatus" },
+        "android": { "$ref": "#/$defs/platformStatus" },
+        "designTokensUsed": { "type": "boolean" },
+        "parity": { "type": "boolean" }
+      }
+    },
+    "designTokensStatus": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "properties": {
+            "synced": { "type": "boolean" },
+            "lastSync": { "type": ["string", "null"], "format": "date-time" },
+            "source": { "type": "string" },
+            "targets": {
+              "type": "object",
+              "properties": {
+                "ios": { "type": "string" },
+                "android": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "apiEntry": {
+      "type": "object",
+      "properties": {
+        "endpoint": { "type": "string" },
+        "ios": {
+          "type": "object",
+          "properties": {
+            "implemented": { "type": "boolean" },
+            "file": { "type": ["string", "null"] }
+          }
+        },
+        "android": {
+          "type": "object",
+          "properties": {
+            "implemented": { "type": "boolean" },
+            "file": { "type": ["string", "null"] }
+          }
+        },
+        "contract": { "type": "string" },
+        "parity": { "type": "boolean" }
+      }
+    },
+    "exceptionEntry": {
+      "type": "object",
+      "properties": {
+        "_template": { "type": "boolean" },
+        "feature": { "type": "string" },
+        "platform": { "enum": ["ios", "android"] },
+        "reason": { "type": "string" },
+        "approved": { "type": "boolean" },
+        "approvedBy": { "type": ["string", "null"] },
+        "approvedAt": { "type": ["string", "null"], "format": "date-time" },
+        "alternativeOnOther": { "type": ["string", "null"] }
+      }
+    },
+    "validationConfig": {
+      "type": "object",
+      "properties": {
+        "enforceDesignTokens": { "type": "boolean" },
+        "requireParityBeforeMerge": { "type": "boolean" },
+        "allowExceptionsWithApproval": { "type": "boolean" },
+        "maxDaysOutOfParity": { "type": "integer" },
+        "autoSyncTokens": { "type": "boolean" }
+      }
+    },
+    "reportsConfig": {
+      "type": "object",
+      "properties": {
+        "lastGeneratedAt": { "type": ["string", "null"], "format": "date-time" },
+        "schedule": { "enum": ["on-commit", "daily", "weekly", "manual"] },
+        "recipients": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "includeInPR": { "type": "boolean" }
+      }
+    }
+  }
+}

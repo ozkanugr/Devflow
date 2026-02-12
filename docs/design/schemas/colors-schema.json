@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "colors-schema.json",
+  "title": "Design System Colors Schema",
+  "description": "JSON Schema for validating color token definitions",
+  "type": "object",
+  "required": ["version", "colors"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": { "type": "string" },
+    "colors": {
+      "type": "object",
+      "properties": {
+        "primary": { "$ref": "#/$defs/colorPalette" },
+        "secondary": { "$ref": "#/$defs/colorPalette" },
+        "accent": { "$ref": "#/$defs/colorPalette" },
+        "semantic": { "$ref": "#/$defs/semanticColors" },
+        "neutral": { "$ref": "#/$defs/neutralColors" },
+        "background": { "$ref": "#/$defs/surfaceColors" },
+        "text": { "$ref": "#/$defs/textColors" },
+        "border": { "$ref": "#/$defs/borderColors" }
+      }
+    },
+    "darkMode": {
+      "type": "object",
+      "properties": {
+        "background": { "$ref": "#/$defs/surfaceColors" },
+        "text": { "$ref": "#/$defs/textColors" },
+        "border": { "$ref": "#/$defs/borderColors" }
+      }
+    },
+    "platforms": {
+      "type": "object",
+      "properties": {
+        "ios": { "type": "object" },
+        "android": { "type": "object" }
+      }
+    }
+  },
+  "$defs": {
+    "hexColor": {
+      "type": "string",
+      "pattern": "^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$"
+    },
+    "colorPalette": {
+      "type": "object",
+      "properties": {
+        "main": { "$ref": "#/$defs/hexColor" },
+        "light": { "$ref": "#/$defs/hexColor" },
+        "dark": { "$ref": "#/$defs/hexColor" },
+        "contrast": { "$ref": "#/$defs/hexColor" }
+      },
+      "required": ["main"]
+    },
+    "semanticColors": {
+      "type": "object",
+      "properties": {
+        "success": { "$ref": "#/$defs/hexColor" },
+        "warning": { "$ref": "#/$defs/hexColor" },
+        "error": { "$ref": "#/$defs/hexColor" },
+        "info": { "$ref": "#/$defs/hexColor" }
+      }
+    },
+    "neutralColors": {
+      "type": "object",
+      "patternProperties": {
+        "^(white|black|gray\\d+)$": { "$ref": "#/$defs/hexColor" }
+      }
+    },
+    "surfaceColors": {
+      "type": "object",
+      "properties": {
+        "primary": { "$ref": "#/$defs/hexColor" },
+        "secondary": { "$ref": "#/$defs/hexColor" },
+        "tertiary": { "$ref": "#/$defs/hexColor" },
+        "elevated": { "$ref": "#/$defs/hexColor" }
+      }
+    },
+    "textColors": {
+      "type": "object",
+      "properties": {
+        "primary": { "$ref": "#/$defs/hexColor" },
+        "secondary": { "$ref": "#/$defs/hexColor" },
+        "tertiary": { "$ref": "#/$defs/hexColor" },
+        "disabled": { "$ref": "#/$defs/hexColor" },
+        "inverse": { "$ref": "#/$defs/hexColor" }
+      }
+    },
+    "borderColors": {
+      "type": "object",
+      "properties": {
+        "default": { "$ref": "#/$defs/hexColor" },
+        "focus": { "$ref": "#/$defs/hexColor" },
+        "error": { "$ref": "#/$defs/hexColor" }
+      }
+    }
+  }
+}

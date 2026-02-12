@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "platform-schema.json",
+  "title": "Platform Configuration Schema",
+  "description": "JSON Schema for validating cross-platform mobile project configuration",
+  "type": "object",
+  "required": ["version", "project", "platforms"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "string" },
+    "_comment": { "type": "string" },
+    "project": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "enum": ["mobile", "web", "desktop", "cross-platform"] },
+        "description": { "type": "string" }
+      }
+    },
+    "platforms": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "array",
+          "items": { "enum": ["ios", "android", "web"] }
+        },
+        "primary": { "enum": ["ios", "android", "web"] },
+        "ios": { "$ref": "#/$defs/iosConfig" },
+        "android": { "$ref": "#/$defs/androidConfig" }
+      }
+    },
+    "shared": { "$ref": "#/$defs/sharedConfig" },
+    "parity": { "$ref": "#/$defs/parityConfig" },
+    "paths": { "$ref": "#/$defs/pathsConfig" },
+    "build": { "$ref": "#/$defs/buildConfig" }
+  },
+  "$defs": {
+    "iosConfig": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "minVersion": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+        "language": { "enum": ["swift", "objective-c"] },
+        "uiFramework": { "enum": ["swiftui", "uikit"] },
+        "architecture": { "enum": ["mvvm", "tca", "viper", "clean"] },
+        "packageManager": { "enum": ["spm", "cocoapods", "carthage"] },
+        "bundleId": { "type": "string" },
+        "targets": {
+          "type": "array",
+          "items": { "enum": ["iPhone", "iPad", "Mac", "Watch", "TV"] }
+        },
+        "capabilities": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "androidConfig": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "minSdk": { "type": "integer", "minimum": 21 },
+        "targetSdk": { "type": "integer", "minimum": 26 },
+        "language": { "enum": ["kotlin", "java"] },
+        "uiFramework": { "enum": ["compose", "views"] },
+        "architecture": { "enum": ["mvvm", "mvi", "clean"] },
+        "packageManager": { "enum": ["gradle"] },
+        "applicationId": { "type": "string" },
+        "targets": {
+          "type": "array",
+          "items": { "enum": ["phone", "tablet", "tv", "watch", "auto"] }
+        },
+        "capabilities": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "sharedConfig": {
+      "type": "object",
+      "properties": {
+        "designSystem": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "colorTokens": { "type": "string" },
+            "typography": { "type": "string" },
+            "spacing": { "type": "string" },
+            "components": { "type": "string" }
+          }
+        },
+        "features": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "apiContracts": { "type": "string" },
+        "localization": {
+          "type": "object",
+          "properties": {
+            "defaultLanguage": { "type": "string" },
+            "supportedLanguages": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "parityConfig": {
+      "type": "object",
+      "properties": {
+        "enforced": { "type": "boolean" },
+        "checkOnBuild": { "type": "boolean" },
+        "registry": { "type": "string" },
+        "exceptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "feature": { "type": "string" },
+              "platform": { "enum": ["ios", "android"] },
+              "reason": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "pathsConfig": {
+      "type": "object",
+      "properties": {
+        "ios": { "$ref": "#/$defs/platformPaths" },
+        "android": { "$ref": "#/$defs/platformPaths" },
+        "shared": {
+          "type": "object",
+          "properties": {
+            "design": { "type": "string" },
+            "api": { "type": "string" },
+            "specs": { "type": "string" }
+          }
+        }
+      }
+    },
+    "platformPaths": {
+      "type": "object",
+      "properties": {
+        "root": { "type": "string" },
+        "sources": { "type": "string" },
+        "resources": { "type": "string" },
+        "tests": { "type": "string" }
+      }
+    },
+    "buildConfig": {
+      "type": "object",
+      "properties": {
+        "ios": {
+          "type": "object",
+          "properties": {
+            "scheme": { "type": "string" },
+            "configuration": { "type": "string" },
+            "simulator": { "type": "string" }
+          }
+        },
+        "android": {
+          "type": "object",
+          "properties": {
+            "variant": { "type": "string" },
+            "emulator": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

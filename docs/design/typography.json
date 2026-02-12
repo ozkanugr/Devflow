@@ -1,5 +1,5 @@
 {
-  "$schema": "./schemas/typography-schema.json",
+  "$schema": "schemas/typography-schema.json",
   "version": "1.0.0",
   "description": "Design system typography tokens - source of truth for iOS and Android",
   "fontFamilies": {

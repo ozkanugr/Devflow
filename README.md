@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Compatible-blue.svg)](https://claude.ai/code)
-[![Version](https://img.shields.io/badge/Version-4.2.0-green.svg)](#changelog)
+[![Version](https://img.shields.io/badge/Version-4.3.0-green.svg)](#changelog)
 
 ---
 
@@ -117,8 +117,11 @@ Devflow is a **Claude Code configuration framework** that provides a complete cr
 | **14-Mode Brainstorming** | Structured ideation with auto-detection |
 | **Three-Layer Task Tracking** | Markdown + JSON Registry + Claude Code Tasks |
 | **Design Token Sync** | Single source → generated Swift/Kotlin code |
+| **JSON Schema Validation** | Validate config files against defined schemas |
+| **API Contracts** | Shared endpoint definitions for iOS/Android |
 | **Specialized Agents** | Platform experts, architect, researcher |
 | **Validation System** | Framework integrity verification |
+| **Session Logging** | Activity and error tracking in `.claude/logs/` |
 
 ### System Requirements
 
@@ -994,7 +997,7 @@ xcodebuild  gradlew    (both)         XCTest    JUnit      (both)
 
 ```json
 {
-  "$schema": "devflow/platform-config/v1",
+  "$schema": "design/schemas/platform-schema.json",
   "project": {
     "name": "string",
     "bundleId": "string"
@@ -1025,11 +1028,20 @@ xcodebuild  gradlew    (both)         XCTest    JUnit      (both)
 
 ### Design Tokens Schema
 
+Design token files reference validation schemas in `docs/design/schemas/`:
+
+| Token File | Schema | Purpose |
+|------------|--------|---------|
+| `colors.json` | `colors-schema.json` | Color validation with hex patterns |
+| `typography.json` | `typography-schema.json` | Font family and type scale |
+| `spacing.json` | `spacing-schema.json` | Spacing tokens and shadows |
+| `components.json` | `components-schema.json` | UI component specifications |
+
 **File:** `docs/design/colors.json`
 
 ```json
 {
-  "$schema": "devflow/design-tokens/v1",
+  "$schema": "schemas/colors-schema.json",
   "colors": {
     "brand": {
       "primary": {
@@ -1107,6 +1119,49 @@ xcodebuild  gradlew    (both)         XCTest    JUnit      (both)
     }
   },
   "lastSync": "2024-01-15T10:30:00Z"
+}
+```
+
+### API Contracts Schema
+
+**File:** `docs/api/contracts.json`
+
+Defines shared API endpoint specifications for consistent iOS and Android network layers:
+
+```json
+{
+  "$schema": "../design/schemas/contracts-schema.json",
+  "version": "1.0.0",
+  "baseUrl": "${API_BASE_URL}",
+  "authentication": {
+    "type": "bearer",
+    "headerName": "Authorization",
+    "refreshEndpoint": "/auth/refresh"
+  },
+  "endpoints": {
+    "auth": {
+      "login": {
+        "path": "/api/v1/auth/login",
+        "method": "POST",
+        "authentication": false,
+        "request": { "body": { "email": "string", "password": "string" } },
+        "response": { "success": { "statusCode": 200 } }
+      }
+    }
+  },
+  "models": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string" }
+      }
+    }
+  },
+  "platforms": {
+    "ios": { "networkLibrary": "URLSession", "jsonDecoding": "Codable" },
+    "android": { "networkLibrary": "Retrofit + OkHttp", "jsonDecoding": "Kotlinx.serialization" }
+  }
 }
 ```
 
@@ -1323,8 +1378,17 @@ project-root/
 │   ├── design/                     # Shared design tokens
 │   │   ├── colors.json
 │   │   ├── typography.json
-│   │   └── spacing.json
+│   │   ├── spacing.json
+│   │   ├── components.json
+│   │   └── schemas/                # JSON validation schemas
+│   │       ├── colors-schema.json
+│   │       ├── typography-schema.json
+│   │       ├── spacing-schema.json
+│   │       ├── components-schema.json
+│   │       ├── platform-schema.json
+│   │       └── platform-parity-schema.json
 │   ├── api/                        # Shared API contracts
+│   │   └── contracts.json          # API endpoint definitions
 │   ├── PRD.md                      # Product requirements
 │   ├── ARCHITECTURE.md             # Architecture decisions
 │   ├── brainstorm/                 # Brainstorming sessions
@@ -1333,7 +1397,12 @@ project-root/
 │       └── {feature}.md            # Human-readable specs
 ├── .claude/
 │   ├── settings.json               # Claude Code settings
+│   ├── settings.local.json         # Local overrides (gitignored)
+│   ├── logs/                       # Session logs (auto-created)
+│   │   ├── audit.log               # Activity tracking
+│   │   └── errors.log              # Error tracking
 │   ├── agents/                     # Agent definitions
+│   │   ├── _base-agent.md          # Agent template
 │   │   ├── architect.md
 │   │   ├── brainstorm.md
 │   │   ├── ios-specialist.md
@@ -1342,11 +1411,13 @@ project-root/
 │   │   ├── reviewer.md
 │   │   └── researcher.md
 │   ├── commands/                   # Slash commands
+│   │   ├── _base-command.md        # Command template
 │   │   ├── brainstorm.md
 │   │   ├── create-prd.md
 │   │   ├── platform-init.md
 │   │   └── ...
 │   ├── skills/                     # Auto-activated skills
+│   │   ├── _base-skill/            # Skill template
 │   │   ├── brainstorming/          # Multi-mode brainstorming
 │   │   ├── cross-platform/         # iOS/Android parity
 │   │   ├── testing/                # TDD & test strategies
@@ -1354,9 +1425,14 @@ project-root/
 │   │   ├── command-development/    # Creating commands
 │   │   ├── agent-development/      # Creating agents
 │   │   └── hook-development/       # Event-driven automation
-│   └── hooks/                      # Event hooks
-│       ├── session-start.sh
-│       └── post-edit.sh
+│   ├── hooks/                      # Event hooks
+│   │   ├── README.md               # Hook documentation
+│   │   ├── session-start.sh        # Session initialization
+│   │   ├── file-protection.sh      # Edit validation
+│   │   ├── post-edit.sh            # Post-edit linting
+│   │   └── statusline.sh           # Custom status display
+│   └── output-styles/              # Response formatting
+│       └── mentor.md               # Mentor output style
 ├── CLAUDE.md                       # Project instructions
 └── README.md                       # Project readme
 ```
@@ -1375,6 +1451,10 @@ project-root/
 | Platform sync fails | Missing `docs/design/` folder | Run `/platform-init` first |
 | Build failing after sync | Token drift | Run `/platform-sync --force` |
 | Parity check failing | Missing platform config | Run `/platform-init` first |
+| Hook not executing | Permission denied | Run `chmod +x .claude/hooks/*.sh` |
+| Hook blocking edits | File pattern matched | Check `.claude/hooks/file-protection.sh` patterns |
+| Logs not appearing | Directory missing | Logs auto-create in `.claude/logs/` on first event |
+| Schema validation fails | Invalid JSON format | Check file against schema in `docs/design/schemas/` |
 
 ### Debug Commands
 
@@ -1392,14 +1472,25 @@ project-root/
 ls -la .claude/commands/
 ls -la .claude/agents/
 ls -la docs/design/
+ls -la docs/design/schemas/
 
 # Validate JSON files
 cat docs/platform.json | jq .
 cat docs/tasks/.task-registry.json | jq .
+cat docs/api/contracts.json | jq .
 
 # Check frontmatter
 head -10 .claude/commands/build.md
 head -15 .claude/agents/architect.md
+
+# View session logs
+cat .claude/logs/audit.log      # Activity log
+cat .claude/logs/errors.log     # Error log
+tail -20 .claude/logs/audit.log # Recent activity
+
+# Test hooks
+chmod +x .claude/hooks/*.sh     # Make executable
+echo '{"tool_name":"Write","tool_input":{"file_path":"test.txt"}}' | bash .claude/hooks/file-protection.sh
 ```
 
 ---
@@ -1492,7 +1583,26 @@ A: Ensure `docs/platform.json` exists and has platforms enabled. Run `/validate 
 
 ## Changelog
 
-### v4.2.0 — Skills Enhancement Edition (Current)
+### v4.3.0 — Schema & Robustness Edition (Current)
+
+- **Added:** JSON validation schemas for all design token files
+  - `colors-schema.json`, `typography-schema.json`, `spacing-schema.json`
+  - `components-schema.json`, `platform-schema.json`, `platform-parity-schema.json`
+- **Added:** API contracts file (`docs/api/contracts.json`) for shared network definitions
+- **Added:** Centralized logging to `.claude/logs/` directory
+  - `audit.log` for session activity tracking
+  - `errors.log` for failure tracking
+- **Enhanced:** Hook robustness with existence checks and auto-directory creation
+- **Enhanced:** `session-start.sh` with improved iOS/Android/cross-platform detection
+- **Enhanced:** `post-edit.sh` with Kotlin (`.kt`, `.kts`) linting support
+- **Enhanced:** `statusline.sh` with cross-platform display ("iOS+Android")
+- **Enhanced:** Settings permissions for iOS (xcodebuild, swift, pod) and Android (gradlew) commands
+- **Enhanced:** Task template with cross-platform parity tracking section
+- **Enhanced:** Hooks README with comprehensive documentation
+- **Fixed:** Schema path references in all design token JSON files
+- **Fixed:** Hook paths now use conditional execution for safer initialization
+
+### v4.2.0 — Skills Enhancement Edition
 
 - **Added:** command-development skill for creating slash commands
 - **Added:** agent-development skill for creating autonomous agents
@@ -1558,6 +1668,6 @@ A: Ensure `docs/platform.json` exists and has platforms enabled. Run `/validate 
 
 ---
 
-*Framework Version: 4.1.0 — Cross-Platform Edition*
-*Last Updated: 2026-02-09*
+*Framework Version: 4.3.0 — Schema & Robustness Edition*
+*Last Updated: 2026-02-12*
 *Compatible with Claude Code*

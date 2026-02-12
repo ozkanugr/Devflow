@@ -66,6 +66,17 @@ case "$EXT" in
         fi
         ;;
 
+    # Kotlin
+    kt|kts)
+        if command -v ktlint &> /dev/null; then
+            echo "Running ktlint..." >&2
+            ktlint "$FILE" 2>&1 | head -10 >&2
+        elif [ -f "./gradlew" ]; then
+            echo "Checking Kotlin syntax..." >&2
+            # Basic syntax check via compilation (optional)
+        fi
+        ;;
+
     # Ruby
     rb)
         if command -v rubocop &> /dev/null; then

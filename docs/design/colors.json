@@ -1,5 +1,5 @@
 {
-  "$schema": "./schemas/colors-schema.json",
+  "$schema": "schemas/colors-schema.json",
   "version": "1.0.0",
   "description": "Design system color tokens - source of truth for iOS and Android",
   "colors": {

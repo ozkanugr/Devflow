@@ -1,5 +1,5 @@
 {
-  "$schema": "./schemas/platform-parity-schema.json",
+  "$schema": "design/schemas/platform-parity-schema.json",
   "version": "1.0",
   "lastUpdated": null,
   "metadata": {

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "typography-schema.json",
+  "title": "Design System Typography Schema",
+  "description": "JSON Schema for validating typography token definitions",
+  "type": "object",
+  "required": ["version", "fontFamilies", "typeScale"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": { "type": "string" },
+    "fontFamilies": {
+      "type": "object",
+      "properties": {
+        "primary": { "$ref": "#/$defs/platformFonts" },
+        "secondary": { "$ref": "#/$defs/platformFonts" },
+        "monospace": { "$ref": "#/$defs/platformFonts" }
+      },
+      "required": ["primary"]
+    },
+    "fontWeights": {
+      "type": "object",
+      "patternProperties": {
+        "^(thin|extraLight|light|regular|medium|semibold|bold|extraBold|black)$": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 900,
+          "multipleOf": 100
+        }
+      }
+    },
+    "typeScale": {
+      "type": "object",
+      "patternProperties": {
+        ".*": { "$ref": "#/$defs/textStyle" }
+      }
+    },
+    "accessibility": {
+      "type": "object",
+      "properties": {
+        "minimumFontSize": { "type": "number", "minimum": 10 },
+        "supportsLargerText": { "type": "boolean" },
+        "dynamicTypeSupport": {
+          "type": "object",
+          "properties": {
+            "ios": { "type": "boolean" },
+            "android": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "platformFonts": {
+      "type": "object",
+      "properties": {
+        "ios": { "type": "string" },
+        "android": { "type": "string" }
+      },
+      "required": ["ios", "android"]
+    },
+    "textStyle": {
+      "type": "object",
+      "properties": {
+        "fontSize": { "type": "number", "minimum": 8 },
+        "lineHeight": { "type": "number", "minimum": 10 },
+        "fontWeight": { "type": "string" },
+        "letterSpacing": { "type": "number" },
+        "ios": { "type": "object" },
+        "android": { "type": "object" }
+      },
+      "required": ["fontSize", "lineHeight", "fontWeight"]
+    }
+  }
+}

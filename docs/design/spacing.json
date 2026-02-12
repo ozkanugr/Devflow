@@ -1,5 +1,5 @@
 {
-  "$schema": "./schemas/spacing-schema.json",
+  "$schema": "schemas/spacing-schema.json",
   "version": "1.0.0",
   "description": "Design system spacing tokens - source of truth for iOS and Android",
   "baseUnit": 4,

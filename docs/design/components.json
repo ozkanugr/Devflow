@@ -1,5 +1,5 @@
 {
-  "$schema": "./schemas/components-schema.json",
+  "$schema": "schemas/components-schema.json",
   "version": "1.0.0",
   "description": "Design system component specifications - source of truth for iOS and Android",
   "components": {

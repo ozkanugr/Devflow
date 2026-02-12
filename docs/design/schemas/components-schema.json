@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "components-schema.json",
+  "title": "Design System Components Schema",
+  "description": "JSON Schema for validating UI component specifications",
+  "type": "object",
+  "required": ["version", "components"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": { "type": "string" },
+    "components": {
+      "type": "object",
+      "patternProperties": {
+        ".*": { "$ref": "#/$defs/componentSpec" }
+      }
+    },
+    "patterns": {
+      "type": "object",
+      "description": "Reusable layout patterns",
+      "patternProperties": {
+        ".*": { "type": "object" }
+      }
+    }
+  },
+  "$defs": {
+    "componentSpec": {
+      "type": "object",
+      "properties": {
+        "variants": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "sizes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "states": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "itemTypes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "specs": { "type": "object" },
+        "platform": {
+          "type": "object",
+          "properties": {
+            "ios": { "type": "object" },
+            "android": { "type": "object" }
+          }
+        },
+        "animation": { "type": "string" }
+      }
+    },
+    "platformValue": {
+      "oneOf": [
+        { "type": "integer" },
+        { "type": "string" },
+        {
+          "type": "object",
+          "properties": {
+            "ios": {},
+            "android": {}
+          }
+        }
+      ]
+    }
+  }
+}

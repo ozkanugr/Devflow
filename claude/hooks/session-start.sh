@@ -50,8 +50,16 @@ if [ -f "$PROJECT_DIR/requirements.txt" ] || [ -f "$PROJECT_DIR/pyproject.toml" 
     echo "  [Python] Python project detected" >&2
 fi
 
-if [ -d "$PROJECT_DIR"/*.xcodeproj ] || [ -d "$PROJECT_DIR"/*.xcworkspace ]; then
-    echo "  [iOS] Xcode project detected" >&2
+if [ -d "$PROJECT_DIR/ios" ] || ls "$PROJECT_DIR"/*.xcodeproj 1>/dev/null 2>&1 || ls "$PROJECT_DIR"/*.xcworkspace 1>/dev/null 2>&1; then
+    echo "  [iOS] iOS project detected" >&2
+fi
+
+if [ -d "$PROJECT_DIR/android" ] || [ -f "$PROJECT_DIR/build.gradle" ] || [ -f "$PROJECT_DIR/build.gradle.kts" ]; then
+    echo "  [Android] Android project detected" >&2
+fi
+
+if [ -f "$PROJECT_DIR/docs/platform.json" ]; then
+    echo "  [Cross-Platform] Platform configuration found" >&2
 fi
 
 # Check git status

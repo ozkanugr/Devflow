@@ -1,0 +1,228 @@
+{
+  "$schema": "../design/schemas/contracts-schema.json",
+  "version": "1.0.0",
+  "description": "API contracts - shared between iOS and Android for consistent network layer implementation",
+  "baseUrl": "${API_BASE_URL}",
+  "defaultHeaders": {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "X-API-Version": "v1"
+  },
+  "authentication": {
+    "type": "bearer",
+    "headerName": "Authorization",
+    "tokenPrefix": "Bearer",
+    "refreshEndpoint": "/auth/refresh",
+    "storage": {
+      "ios": "Keychain",
+      "android": "EncryptedSharedPreferences"
+    }
+  },
+  "endpoints": {
+    "_template": {
+      "path": "/api/v1/resource",
+      "method": "GET",
+      "description": "Template endpoint",
+      "authentication": true,
+      "request": {
+        "headers": {},
+        "query": {},
+        "body": null
+      },
+      "response": {
+        "success": {
+          "statusCode": 200,
+          "schema": {}
+        },
+        "errors": []
+      }
+    },
+    "auth": {
+      "login": {
+        "path": "/api/v1/auth/login",
+        "method": "POST",
+        "description": "Authenticate user with email and password",
+        "authentication": false,
+        "request": {
+          "body": {
+            "type": "object",
+            "required": ["email", "password"],
+            "properties": {
+              "email": { "type": "string", "format": "email" },
+              "password": { "type": "string", "minLength": 8 }
+            }
+          }
+        },
+        "response": {
+          "success": {
+            "statusCode": 200,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accessToken": { "type": "string" },
+                "refreshToken": { "type": "string" },
+                "expiresIn": { "type": "integer" },
+                "user": { "$ref": "#/models/User" }
+              }
+            }
+          },
+          "errors": [
+            { "statusCode": 401, "code": "INVALID_CREDENTIALS", "message": "Invalid email or password" },
+            { "statusCode": 429, "code": "TOO_MANY_ATTEMPTS", "message": "Too many login attempts" }
+          ]
+        }
+      },
+      "logout": {
+        "path": "/api/v1/auth/logout",
+        "method": "POST",
+        "description": "Invalidate current session",
+        "authentication": true,
+        "response": {
+          "success": { "statusCode": 204 }
+        }
+      },
+      "refresh": {
+        "path": "/api/v1/auth/refresh",
+        "method": "POST",
+        "description": "Refresh access token using refresh token",
+        "authentication": false,
+        "request": {
+          "body": {
+            "type": "object",
+            "required": ["refreshToken"],
+            "properties": {
+              "refreshToken": { "type": "string" }
+            }
+          }
+        },
+        "response": {
+          "success": {
+            "statusCode": 200,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accessToken": { "type": "string" },
+                "expiresIn": { "type": "integer" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "user": {
+      "getProfile": {
+        "path": "/api/v1/users/me",
+        "method": "GET",
+        "description": "Get current user profile",
+        "authentication": true,
+        "response": {
+          "success": {
+            "statusCode": 200,
+            "schema": { "$ref": "#/models/User" }
+          }
+        }
+      },
+      "updateProfile": {
+        "path": "/api/v1/users/me",
+        "method": "PATCH",
+        "description": "Update current user profile",
+        "authentication": true,
+        "request": {
+          "body": {
+            "type": "object",
+            "properties": {
+              "displayName": { "type": "string" },
+              "avatarUrl": { "type": "string", "format": "uri" }
+            }
+          }
+        },
+        "response": {
+          "success": {
+            "statusCode": 200,
+            "schema": { "$ref": "#/models/User" }
+          }
+        }
+      }
+    }
+  },
+  "models": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "avatarUrl": { "type": "string", "format": "uri", "nullable": true },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "email", "createdAt"]
+    },
+    "PaginatedResponse": {
+      "type": "object",
+      "properties": {
+        "data": { "type": "array", "items": {} },
+        "pagination": {
+          "type": "object",
+          "properties": {
+            "page": { "type": "integer", "minimum": 1 },
+            "pageSize": { "type": "integer", "minimum": 1, "maximum": 100 },
+            "totalItems": { "type": "integer" },
+            "totalPages": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "message": { "type": "string" },
+        "details": { "type": "object", "nullable": true },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["code", "message"]
+    }
+  },
+  "errorCodes": {
+    "UNAUTHORIZED": { "statusCode": 401, "description": "Authentication required" },
+    "FORBIDDEN": { "statusCode": 403, "description": "Insufficient permissions" },
+    "NOT_FOUND": { "statusCode": 404, "description": "Resource not found" },
+    "VALIDATION_ERROR": { "statusCode": 422, "description": "Request validation failed" },
+    "INTERNAL_ERROR": { "statusCode": 500, "description": "Internal server error" }
+  },
+  "rateLimiting": {
+    "enabled": true,
+    "defaultLimit": {
+      "requests": 100,
+      "window": "1m"
+    },
+    "headers": {
+      "limit": "X-RateLimit-Limit",
+      "remaining": "X-RateLimit-Remaining",
+      "reset": "X-RateLimit-Reset"
+    }
+  },
+  "pagination": {
+    "defaultPageSize": 20,
+    "maxPageSize": 100,
+    "queryParams": {
+      "page": "page",
+      "pageSize": "pageSize",
+      "sortBy": "sortBy",
+      "sortOrder": "sortOrder"
+    }
+  },
+  "platforms": {
+    "ios": {
+      "networkLibrary": "URLSession",
+      "jsonDecoding": "Codable",
+      "errorHandling": "Result<T, Error>"
+    },
+    "android": {
+      "networkLibrary": "Retrofit + OkHttp",
+      "jsonDecoding": "Kotlinx.serialization",
+      "errorHandling": "Result<T>"
+    }
+  }
+}
