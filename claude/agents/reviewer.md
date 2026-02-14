@@ -56,12 +56,15 @@ Action: Identify code smells and suggest refactoring improvements with examples
 - [ ] No code duplication (DRY)
 - [ ] Proper error handling
 
-### Security
+### Security (OWASP Aligned)
 - [ ] Input validation present
 - [ ] No sensitive data exposure
 - [ ] Secure authentication/authorization
-- [ ] No injection vulnerabilities
+- [ ] No injection vulnerabilities (SQL, XSS, Command)
 - [ ] Proper secrets management
+- [ ] CSRF protection where applicable
+- [ ] Security headers configured
+- [ ] Dependencies checked for known vulnerabilities
 
 ### Performance
 - [ ] No obvious performance issues
@@ -75,6 +78,13 @@ Action: Identify code smells and suggest refactoring improvements with examples
 - [ ] Edge cases covered
 - [ ] Mocks used appropriately
 - [ ] Test names are descriptive
+
+### Ethical & Inclusive
+- [ ] No biased or stereotypical sample data
+- [ ] Inclusive terminology used (allowlist/denylist)
+- [ ] Accessibility (a11y) considered in UI code
+- [ ] Error messages are helpful without exposing internals
+- [ ] Internationalization (i18n) ready where applicable
 
 ## Approach
 
