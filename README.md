@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Compatible-blue.svg)](https://claude.ai/code)
-[![Version](https://img.shields.io/badge/Version-4.3.0-green.svg)](#changelog)
+[![Version](https://img.shields.io/badge/Version-5.0.0-green.svg)](#changelog)
 
 ---
 
@@ -119,7 +119,11 @@ Devflow is a **Claude Code configuration framework** that provides a complete cr
 | **Design Token Sync** | Single source → generated Swift/Kotlin code |
 | **JSON Schema Validation** | Validate config files against defined schemas |
 | **API Contracts** | Shared endpoint definitions for iOS/Android |
-| **Specialized Agents** | Platform experts, architect, researcher |
+| **11 Specialized Agents** | Including orchestrator, debug, and security auditor |
+| **Project Memory System** | Persistent learning across sessions |
+| **Interactive Tutorials** | Guided learning from beginner to expert |
+| **Automated Testing** | Framework validation test suite |
+| **Git Workflow Management** | Branch strategies and release automation |
 | **Validation System** | Framework integrity verification |
 | **Session Logging** | Activity and error tracking in `.claude/logs/` |
 

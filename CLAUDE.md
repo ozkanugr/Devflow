@@ -93,6 +93,40 @@
 - Provide meaningful error messages
 - Match error states across platforms
 
+## Ethical Guidelines
+
+### Core Principles (Constitutional AI Alignment)
+
+- **Harmlessness** — Generate code that is safe, secure, and does not cause harm
+- **Honesty** — Provide accurate information; acknowledge limitations and uncertainties
+- **Privacy** — Protect user data; never expose or log sensitive information
+- **Security First** — Validate inputs, sanitize outputs, prevent injection vulnerabilities
+- **Inclusivity** — Consider accessibility (a11y) and internationalization (i18n) in all features
+
+### Code Generation Standards
+
+- **No Harmful Patterns** — Avoid generating code that could be used maliciously
+- **Input Validation** — Always validate and sanitize user inputs
+- **Data Protection** — Never hardcode secrets, tokens, or personal data
+- **Bias Awareness** — Avoid stereotypes in sample data, variable names, or comments
+- **Accessible by Default** — Include ARIA labels, semantic markup, and screen reader support
+
+### Content Guidelines
+
+- Avoid offensive, discriminatory, or exclusionary language in code comments and documentation
+- Use inclusive terminology (e.g., "allowlist/denylist" not "whitelist/blacklist")
+- Consider diverse cultural contexts when creating example data or placeholder content
+- Provide meaningful error messages that help users without exposing system internals
+
+### Security Checklist
+
+- [ ] Input validation on all user-provided data
+- [ ] Output encoding to prevent XSS
+- [ ] Parameterized queries to prevent SQL injection
+- [ ] Authentication and authorization checks
+- [ ] Sensitive data encrypted at rest and in transit
+- [ ] No secrets in source code or logs
+
 ## Testing Requirements
 
 | Platform | Framework | Coverage Target |
@@ -174,6 +208,20 @@
 | `/test [pattern] [--ios\|--android]` | Run tests |
 | `/create-feature <name> [--ios\|--android\|--both]` | Scaffold new feature |
 | `/validate [--commands\|--agents\|--platform\|--tasks]` | Validate configuration framework |
+| `/run-tests [--commands\|--agents\|--all]` | Run automated framework tests |
+
+### Git & Release Commands
+
+| Command | Description |
+|---------|-------------|
+| `/git-workflow [feature\|bugfix\|release] <name>` | Create branches with proper naming |
+| `/release [major\|minor\|patch]` | Manage releases with versioning |
+
+### Learning Commands
+
+| Command | Description |
+|---------|-------------|
+| `/tutorial [lesson\|list\|progress]` | Interactive framework tutorials |
 
 ## Available Agents
 
@@ -181,11 +229,14 @@
 |-------|---------|-------|
 | `architect` | System design & architecture | Opus |
 | `brainstorm` | Guided brainstorming facilitator | Opus |
+| `orchestrator` | Multi-agent workflow coordination | Opus |
+| `security-auditor` | Security review & vulnerability scanning | Opus |
 | `ios-specialist` | iOS/Swift/SwiftUI expert | Sonnet |
 | `android-specialist` | Android/Kotlin/Compose expert | Sonnet |
 | `task-manager` | Task lifecycle management | Sonnet |
 | `reviewer` | Code review & quality | Sonnet |
 | `researcher` | API research & docs | Sonnet |
+| `debug-agent` | Error diagnosis & debugging | Sonnet |
 
 ## Cross-Platform Parity
 
@@ -263,6 +314,17 @@ Run `/validate` for quick configuration checks:
 | `command-development` | Slash command creation |
 | `agent-development` | Autonomous agent design |
 | `hook-development` | Event-driven automation |
+| `error-handling` | Error handling patterns for iOS/Android |
+| `performance` | Performance optimization and profiling |
+
+## Memory System
+
+Persistent learning stored in `.claude/memory/`:
+- `project-context.md` — Project-specific conventions
+- `user-preferences.md` — Learned user preferences
+- `error-patterns.md` — Common errors and solutions
+- `workflow-history.md` — Successful workflow patterns
+- `decisions.md` — Architectural decisions
 
 ## Memory Imports
 

@@ -91,6 +91,14 @@ When to use this pattern and brief explanation.
 - **Practice 3**: Brief explanation
 - **Practice 4**: Brief explanation
 
+## Inclusive Design Principles
+
+- **Accessibility First** — Include ARIA labels, semantic HTML, and keyboard navigation
+- **Cultural Sensitivity** — Use diverse, non-stereotypical example data
+- **Inclusive Language** — Avoid exclusionary terminology in code and comments
+- **Internationalization** — Design for multiple locales and languages from the start
+- **Error Clarity** — Provide helpful, non-technical error messages for end users
+
 ## Anti-Patterns to Avoid
 
 - **Anti-pattern 1**: Why to avoid and what to do instead

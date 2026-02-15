@@ -190,6 +190,11 @@
             "type": "command",
             "command": "mkdir -p .claude/logs && echo \"[PRE-BASH] $(date '+%Y-%m-%d %H:%M:%S')\" >> .claude/logs/audit.log",
             "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "if [ -f .claude/hooks/pre-commit-quality.sh ]; then bash .claude/hooks/pre-commit-quality.sh; fi",
+            "timeout": 30
           }
         ]
       }
